@@ -23,6 +23,21 @@ We decided to use _support vector regressor_, _hidden Markov model_, _random for
 
 The data is stored in a csv format file, and there are two columns: `acoustic data` and `time to failure`, indicating the data collected from experimental earthquake and the remaining time to next earthquake. The size of data is enormous (8.9GB), so to get an overview of data, we down-sample the data with a span of 300 and draw the curve shown below.
 
+Here is what the raw data looks like.
+
+|acoustic_data|time_to_failure|
+|:-:|:-:|
+|12|1.4690999832|
+|6|1.4690999821|
+|8|1.469099981|
+|5|1.4690999799|
+|8|1.4690999788|
+|8|1.4690999777|
+|9|1.4690999766|
+|7|1.4690999755|
+|-5|1.4690999744|
+|3|1.4690999733|
+
 ### Visualization
 
 ![visualization](data_visualization.png)
