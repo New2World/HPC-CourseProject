@@ -27,27 +27,32 @@ The data is stored in a csv format file, and there are two columns: `acoustic da
 
 ![visualization](data_visualization.png)
 
-Each peak of red line correspond to a zero value in blue line, indicating an earthquake happens
+Each peak of red line correspond to a zero value in blue line, indicating an earthquake happens.
+
+As we usually do to anaylize data with temporality, we apply Fourier transform. Here is the figure of one entire earthquake in frequency field. Most of time there is low frequency data, only when an earthquake happens high frequency will appear for few milliseconds.
+
+![fft](fft.png)
 
 ### Features
 
+In preliminary we under estimated the importance of feature engineering. As this is a traditional machine learning task, and the raw data is presented in time sequence, we cannot feed the data into machine learning models directly. Shown the raw data visualization, the acoustic data is dense in time steps, but the value disturbance is not significant most of time.
 Here are some statistic features extracted from the raw data, including mean, mode, standard deviation etc.
 
 > TODO: 
 > - explain `kurtosis`, `skew`, `quantile`
 
-|mean|mode| std| min| max|kurtosis|skew|quantile|
-|:--:|:--:|:--:|:--:|:--:|:------:|:--:|:------:|
-|4.61|3.0|3.14710144|-5|15|0.322667067|0.0457427014|-3.0|
-|4.91|5.0|2.69630409|-2|14|-0.135646084|0.120890874|-1.0|
-|5.10|5.0|2.76999974|-4|12|0.259263007|-0.276245047|-2.01|
-|5.10|5.0|4.60616014|-10|16|-0.130017036|-0.229876373|-6.0|
-|5.17|6.0|4.23461870|-5|16|-0.377477283|0.0850487395|-4.0|
-|5.56|7.0|4.30127797|-7|19|0.0650931512|0.0510493822|-4.0|
-|5.05|7.0|3.82709346|-5|15|-0.413551741|0.0889817181|-3.0|
-|5.28|6.0|17.8110183|-41|64|1.17986709|0.0737194603|-38.0|
-|5.05|1.0|12.0677223|-27|34|-0.452584126|-0.0185136062|-23.02|
-|5.04|4.0|6.66002819|-11|22|-0.411249801|0.168935276|-9.01|
+|mean| std| max|kurtosis|skew|quantile (.01)|quantile (.05)|quantile (.95)|quantile (.99)|
+|:--:|:--:|:--:|:------:|:--:|:-----------:|:-----------:|:-----------:|:-----------:|
+|4.79|2.55|13.0000|-0.18|0.26|0.0000|1.0000|9.0000|11.0000|
+|4.76|2.52|13.0000|-0.24|0.22|0.0000|1.0000|9.0000|11.0000|
+|4.75|2.52|13.0000|-0.24|0.23|0.0000|1.0000|9.0000|11.0000|
+|4.75|2.53|13.0000|-0.25|0.24|0.0000|1.0000|9.0000|11.0000|
+|4.75|2.52|13.0000|-0.24|0.24|0.0000|1.0000|9.0000|11.0000|
+|4.77|2.50|13.0000|-0.22|0.25|0.0000|1.0000|9.0000|11.0000|
+|4.78|2.52|13.0000|-0.24|0.26|0.0000|1.0000|9.0000|11.0000|
+|4.78|2.52|13.0000|-0.24|0.26|0.0000|1.0000|9.0000|11.0000|
+|4.78|2.52|13.0000|-0.24|0.26|0.0000|1.0000|9.0000|11.0000|
+|4.78|2.52|13.0000|-0.23|0.26|0.0000|1.0000|9.0000|11.0000|
 
 ## Method
 
