@@ -19,6 +19,30 @@ We decided to use _support vector regressor_, _hidden Markov model_, _random for
 
 > TODO
 
+Continuous chatter of the Cascadia subduction zone revealed by machine learning ([link](https://www.nature.com/articles/s41561-018-0274-6))
+
+Similarity of fast and slow earthquakes illuminated by machine learning ([link](https://www.nature.com/articles/s41561-018-0272-8#data-availability))
+- model  
+gradient boosted trees25 algorithm
+
+Earthquake prediction model using support vector regressor and hybrid neural networks ([link](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0199004))  
+
+The SVR-HNN model
+![paper1](https://journals.plos.org/plosone/article/figure/image?id=10.1371/journal.pone.0199004.g003&size=large)
+
+Parameters
+- a and b value (from well-known geophysical law known as Gutenberg-Richter law)
+- Seismic energy release
+- Time of n events
+- Mean Magnitude
+- Seismic rate changes
+- Maximum magnitude in last seven days
+- Probability of earthquake occurrence
+- Deviation from Gutenberg-Richer law
+- Standard deviation of b value
+- Magnitude deficit
+- Total recurrence time
+
 ## Data
 
 The data is stored in a csv format file, and there are two columns: `acoustic data` and `time to failure`, indicating the data collected from experimental earthquake and the remaining time to next earthquake. The size of data is enormous (8.9GB), so to get an overview of data, we down-sample the data with a span of 300 and draw the curve shown below.
@@ -54,7 +78,19 @@ In preliminary we under estimated the importance of feature engineering. As this
 Here are some statistic features extracted from the raw data, including mean, mode, standard deviation etc.
 
 > TODO: 
-> - explain `kurtosis`, `skew`, `quantile`
+> - explain `kurtosis`, `skew`, `quantile`  
+
+Kurtosis
+- measure of tailedness  
+![pic2](https://upload.wikimedia.org/wikipedia/commons/e/e6/Standard_symmetric_pdfs.png)
+
+Skewness
+- measure of asymmetry
+![pic1](https://cdn-images-1.medium.com/max/800/1*nj-Ch3AUFmkd0JUSOW_bTQ.jpeg)
+
+Quantile
+- Cut points that devide data
+![pic3](https://www.hr-diagnostics.de/fileadmin/user_upload/Magazin/Artikelbilder/normieren-und-die-normalverteilung.jpg)
 
 |mean| std| max|kurtosis|skew|quantile (.01)|quantile (.05)|quantile (.95)|quantile (.99)|
 |:--:|:--:|:--:|:------:|:--:|:-----------:|:-----------:|:-----------:|:-----------:|
