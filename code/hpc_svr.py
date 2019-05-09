@@ -44,7 +44,7 @@ def feature_generator(data, chunksize=300, span=100):
         chunk_data = data_value[i:i+chunksize]
         yield get_features(chunk_data[:,0]), chunk_data[:,1][-1]
 
-training_data = pd.read_csv("train.csv", chunksize=150000, 
+training_data = pd.read_csv("../train.csv", chunksize=150000, 
                             dtype={'acoustic_data':np.int16,
                             'time_to_failure':np.float64})
 
