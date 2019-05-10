@@ -70,12 +70,18 @@ for each_chunk in training_data:
     if episode >= 4196:
         break
 
+y_test = np.array(y_test)
+
 svr = SVR(gamma='scale')
-svr.fit(X_train, y_train)
+param_grid = {
+        'kernel':['poly','rbf'],
+        'C':[.5, .9, 1.],
+}
+grid_search = GridSearchCV(svr, cv=10, param_grid=param_grid, n_jobs=16)
+grid_search.fit(X_train, y_train)
 
 y_test_pred = svr.predict(X_test)
 
-y_test = np.array(y_test)
 mae = np.mean(np.abs(y_test-y_test_pred))
 
 print "MAE: {}".format(mae)
