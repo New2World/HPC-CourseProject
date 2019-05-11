@@ -3,9 +3,6 @@ import scipy.stats as stats
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.model_selection import GridSearchCV
-from sklearn.svm import NuSVR, SVR
-
 def plot_ad_ttf_data(train_ad_sample, train_ttf_sample, title="Acoustic data and time to failure: sampled data"):
     _, ax1 = plt.subplots(figsize=(12, 8))
     plt.title(title)
@@ -54,6 +51,7 @@ X_test = []
 y_train = []
 y_test = []
 
+# generate features
 # total episode: 4194
 for each_chunk in training_data:
     episode += 1
@@ -70,18 +68,12 @@ for each_chunk in training_data:
     if episode >= 4196:
         break
 
+X_train = np.array(X_train)
+X_test = np.array(X_test)
+y_train = np.array(y_train)
 y_test = np.array(y_test)
 
-svr = SVR(gamma='scale')
-param_grid = {
-        'kernel':['poly','rbf'],
-        'C':[.5, .9, 1.],
-}
-grid_search = GridSearchCV(svr, cv=10, param_grid=param_grid, n_jobs=16)
-grid_search.fit(X_train, y_train)
-
-y_test_pred = svr.predict(X_test)
-
-mae = np.mean(np.abs(y_test-y_test_pred))
-
-print "MAE: {}".format(mae)
+np.savez("earthquake_train", X_train=X_train, y_train=y_train)
+print "training data saved"
+np.savez("earthquake_test", X_test=X_test, y_test=y_test)
+print "test data saved"
