@@ -43,10 +43,10 @@ X = torch.randn(64,200,12)
 y = torch.randn(64,200,1)
 # X = torch.randn(64,200,1)
 # y = torch.randn(64,200,1)
-print "generate data"
+print("generate data")
 model = ConvLSTM()
 # model = SimpleLSTM()
-print "build model"
+print("build model")
 
 lr = .01
 loss_fn = nn.MSELoss()
@@ -56,9 +56,9 @@ loss = 1.5
 iter_times = 0
 X.cuda()
 y.cuda()
-print "enable GPU"
+print("enable GPU")
 
-print "training"
+print("training")
 while loss > 1e-3 and iter_times < 50:
     outp = model(X)
     loss = loss_fn(outp[0], y)
@@ -66,4 +66,4 @@ while loss > 1e-3 and iter_times < 50:
     loss.backward()
     optimizer.step()
     iter_times += 1
-    print "{}/50 - loss: {}".format(iter_times, loss.data.cpu().numpy())
+    print("{}/50 - loss: {}".format(iter_times, loss.data.cpu().numpy()))
