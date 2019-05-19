@@ -46,65 +46,35 @@ def feature_generator(data, chunksize=300, span=100):
         chunk_data = data_value[i:i+chunksize]
         yield get_features(chunk_data[:,0]), chunk_data[:,1][-1]
 
-# training_data = pd.read_csv("../train.csv", chunksize=150000,
-#                             dtype={'acoustic_data':np.int16,
-#                             'time_to_failure':np.float64})
-#
+training_data = pd.read_csv("../train.csv", chunksize=150000,
+                         dtype={'acoustic_data':np.int16,
+                         'time_to_failure':np.float64})
 # episode = 0
-# X_train = []
-# X_test = []
-# y_train = []
-# y_test = []
-#
-# # total episode: 4194
-# for each_chunk in training_data:
-#     episode += 1
-#     generate_feature = feature_generator(each_chunk)
-#     for i in xrange(1201):
-#         feature, ttf = generate_feature.next()
-#         if episode < 4000:
-#             X_train.append(feature)
-#             y_train.append(ttf)
-#         else:
-#             X_test.append(feature)
-#             y_test.append(ttf)
-#     print "episode #{}".format(episode)
-#     if episode >= 4193:
-#         break
-#
+X_train = []
+X_test = []
+y_train = []
+y_test = []
+
+# total episode: 4194
+for each_chunk in training_data:
+ episode += 1
+ generate_feature = feature_generator(each_chunk)
+ for i in xrange(1201):
+     feature, ttf = generate_feature.next()
+     if episode < 4000:
+         X_train.append(feature)
+         y_train.append(ttf)
+     else:
+         X_test.append(feature)
+         y_test.append(ttf)
+ print "episode #{}".format(episode)
+ if episode >= 4193:
+     break
 # X_train = np.array(X_train)
-# X_test = np.array(X_test)
-# y_train = np.array(y_train)
-# y_test = np.array(y_test)
-
-# np.savez("earthquake_train.npz", X_train=X_train, y_train=y_train)
-# print "Train data saved"
-# np.savez("earthquake_test.npz", X_test=X_test, y_test=y_test)
-# print "Test data saved"
-
-npzfile = np.load("earthquake_train.npz")
-X_train = npzfile['X_train']
-y_train = npzfile['y_train']
-print "Data loaded"
-
-svr = SVR(gamma='scale')
-print "Training..."
-svr.fit(X_train, y_train)
-pickle.dump(svr, open("SVR_model.sav", "wb"))
-print "Model saved"
-
-# svr = pickle.load(open("SVR_model.sav", "rb"))
-# print "Model loaded"
-
-npzfile = np.load("earthquake_test.npz")
-X_test = npzfile['X_test']
-y_test = npzfile['y_test']
-
-y_test_pred = svr.predict(X_test)
-
-mae = np.mean(np.abs(y_test-y_test_pred))
-
-np.savez("earthquake_train", X_train=X_train, y_train=y_train)
-print "training data saved"
-np.savez("earthquake_test", X_test=X_test, y_test=y_test)
-print "test data saved"
+X_test = np.array(X_test)
+y_train = np.array(y_train)
+y_test = np.array(y_test)
+np.savez("earthquake_train.npz", X_train=X_train, y_train=y_train)
+print "Train data saved"
+np.savez("earthquake_test.npz", X_test=X_test, y_test=y_test)
+print "Test data saved"
