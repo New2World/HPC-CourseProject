@@ -3,11 +3,6 @@ import scipy.stats as stats
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.model_selection import GridSearchCV
-from sklearn.svm import NuSVR, SVR
-
-import pickle
-
 def plot_ad_ttf_data(train_ad_sample, train_ttf_sample, title="Acoustic data and time to failure: sampled data"):
     _, ax1 = plt.subplots(figsize=(12, 8))
     plt.title(title)
@@ -39,13 +34,6 @@ def get_features(X):
     # add more
     return np.array(feat)
 
-def feature_generator(data, chunksize=300, span=100):
-    iters = 629145480 / span - chunksize + 1
-    data_value = data.values[::span]
-    for i in xrange(iters):
-        chunk_data = data_value[i:i+chunksize]
-        yield get_features(chunk_data[:,0]), chunk_data[:,1][-1]
-
 training_data = pd.read_csv("../train.csv", chunksize=150000,
                          dtype={'acoustic_data':np.int16,
                          'time_to_failure':np.float64})
@@ -56,25 +44,25 @@ y_train = []
 y_test = []
 
 # total episode: 4194
-for each_chunk in training_data:
- episode += 1
- generate_feature = feature_generator(each_chunk)
- for i in xrange(1201):
-     feature, ttf = generate_feature.next()
-     if episode < 4000:
-         X_train.append(feature)
-         y_train.append(ttf)
-     else:
-         X_test.append(feature)
-         y_test.append(ttf)
- print "episode #{}".format(episode)
- if episode >= 4193:
-     break
-# X_train = np.array(X_train)
+for data_chunk in training_data:
+    x = data_chunk.values[:,0]
+    y = data_chunk.values[:,1]
+    if iter < 4000:
+        X_train.append(get_features(x))
+        y_train.append(y)
+    else:
+        X_test.append(get_features(x))
+        y_test.append(y)
+
+print ("training set size: {}".format(len(X_train)))
+print ("test set size: {}".format(len(X_test)))
+
+X_train = np.array(X_train)
 X_test = np.array(X_test)
 y_train = np.array(y_train)
 y_test = np.array(y_test)
+
 np.savez("earthquake_train.npz", X_train=X_train, y_train=y_train)
-print "Train data saved"
+print ("Train data saved")
 np.savez("earthquake_test.npz", X_test=X_test, y_test=y_test)
-print "Test data saved"
+print ("Test data saved")
