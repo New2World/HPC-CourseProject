@@ -114,7 +114,7 @@ while epoch < epoches:
     print ("{}/{} - avg loss: {} - lr: {}".format(epoch, epoches, avg_loss.cpu().data.numpy(), scheduler.get_lr()[0]))
     scheduler.step()
 
-summary_writer.add_graph(model)
+# summary_writer.add_graph(model)
 torch.save(model.state_dict(), "pytorch_model.pt")
 summary_writer.close()
 print ("Model saved")
