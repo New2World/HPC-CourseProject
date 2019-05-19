@@ -5,6 +5,7 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.utils.tensorboard import SummaryWriter
 
 class ConvLSTM(nn.Module):
     def __init__(self):
@@ -68,11 +69,11 @@ n_samples = X_train.shape[0]
 # X_test = raw_data[4000*150000+1:,0]
 # y_test = raw_data[4000*150000+1:,1]
 
-print "generate data - size: {}".format(n_samples)
+print ("generate data - size: {}".format(n_samples))
 
 model = ConvLSTM().cuda()
 # model = SimpleLSTM()
-print "build model"
+print ("build model")
 
 lr = .0001
 batch_size = 64
@@ -81,18 +82,22 @@ loss_fn = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=lr)
 scheduler = optim.lr_scheduler.StepLR(optimizer, 150, gamma=.1)
 
-iter_times = 0
+epoch = 0
+batch_iter = 0
 batchs = int(math.ceil(1.*n_samples/batch_size))
 rand_index = np.arange(n_samples)
 X = torch.from_numpy(X_train).type(torch.FloatTensor).cuda()
 y = torch.from_numpy(y_train).type(torch.FloatTensor).cuda()
-print "enable GPU"
+print ("enable GPU")
 
-print "training"
-while iter_times < epoches:
+summary_writer = SummaryWriter()
+
+print ("training")
+while epoch < epoches:
     avg_loss = 0
     np.random.shuffle(rand_index)
     for i in range(batchs):
+        batch_iter += 1
         start = i*batch_size
         end = min(start+batch_size, n_samples)
         batch_index = rand_index[start:end]
@@ -102,9 +107,14 @@ while iter_times < epoches:
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    iter_times += 1
-    print "{}/{} - avg loss: {} - lr: {}".format(iter_times, epoches, avg_loss.cpu().data.numpy()/batchs, scheduler.get_lr()[0])
+        summary_writer.add_scalar("batch loss", loss, global_step=batch_iter)
+    epoch += 1
+    avg_loss /= batchs
+    summary_writer.add_scalar("epoch loss", avg_loss, global_step=epoch)
+    print ("{}/{} - avg loss: {} - lr: {}".format(epoch, epoches, avg_loss.cpu().data.numpy(), scheduler.get_lr()[0]))
     scheduler.step()
 
+summary_writer.add_graph(model)
 torch.save(model.state_dict(), "pytorch_model.pt")
-print "Model saved"
+summary_writer.close()
+print ("Model saved")
