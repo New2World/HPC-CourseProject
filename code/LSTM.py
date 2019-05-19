@@ -76,9 +76,10 @@ print "build model"
 
 lr = .0001
 batch_size = 64
+epoches = 200
 loss_fn = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=lr)
-scheduler = optim.lr_scheduler.StepLR(optimizer, 100, gamma=.1)
+scheduler = optim.lr_scheduler.StepLR(optimizer, 150, gamma=.1)
 
 iter_times = 0
 batchs = int(math.ceil(1.*n_samples/batch_size))
@@ -88,7 +89,7 @@ y = torch.from_numpy(y_train).type(torch.FloatTensor).cuda()
 print "enable GPU"
 
 print "training"
-while iter_times < 100:
+while iter_times < epoches:
     avg_loss = 0
     np.random.shuffle(rand_index)
     for i in range(batchs):
@@ -102,7 +103,7 @@ while iter_times < 100:
         loss.backward()
         optimizer.step()
     iter_times += 1
-    print "{}/50 - avg loss: {} - lr: {}".format(iter_times, avg_loss.cpu().data.numpy()/batchs, scheduler.get_lr()[0])
+    print "{}/{} - avg loss: {} - lr: {}".format(iter_times, epoches, avg_loss.cpu().data.numpy()/batchs, scheduler.get_lr()[0])
     scheduler.step()
 
 torch.save(model.state_dict(), "pytorch_model.pt")

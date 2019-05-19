@@ -3,14 +3,11 @@ import scipy.stats as stats
 import pandas as pd
 import matplotlib.pyplot as plt
 
-<<<<<<< HEAD:code/hpc_svr.py
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import NuSVR, SVR
 
 import pickle
 
-=======
->>>>>>> c68ca640af201fb009e7955931ea6aaf32538005:code/generate_feature.py
 def plot_ad_ttf_data(train_ad_sample, train_ttf_sample, title="Acoustic data and time to failure: sampled data"):
     _, ax1 = plt.subplots(figsize=(12, 8))
     plt.title(title)
@@ -85,7 +82,6 @@ def feature_generator(data, chunksize=300, span=100):
 # np.savez("earthquake_test.npz", X_test=X_test, y_test=y_test)
 # print "Test data saved"
 
-<<<<<<< HEAD:code/hpc_svr.py
 npzfile = np.load("earthquake_train.npz")
 X_train = npzfile['X_train']
 y_train = npzfile['y_train']
@@ -107,29 +103,6 @@ y_test = npzfile['y_test']
 y_test_pred = svr.predict(X_test)
 
 mae = np.mean(np.abs(y_test-y_test_pred))
-=======
-# generate features
-# total episode: 4194
-for each_chunk in training_data:
-    episode += 1
-    generate_feature = feature_generator(each_chunk)
-    for i in xrange(1201):
-        feature, ttf = generate_feature.next()
-        if episode < 4000:
-            X_train.append(feature)
-            y_train.append(ttf)
-        else:
-            X_test.append(feature)
-            y_test.append(ttf)
-    print "episode #{}".format(episode)
-    if episode >= 4196:
-        break
-
-X_train = np.array(X_train)
-X_test = np.array(X_test)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
->>>>>>> c68ca640af201fb009e7955931ea6aaf32538005:code/generate_feature.py
 
 np.savez("earthquake_train", X_train=X_train, y_train=y_train)
 print "training data saved"
