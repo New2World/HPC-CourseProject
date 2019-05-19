@@ -17,8 +17,6 @@ We decided to use _support vector regressor_, _hidden Markov model_, _random for
 
 ## State of the Art
 
-> TODO
-
 Continuous chatter of the Cascadia subduction zone revealed by machine learning ([link](https://www.nature.com/articles/s41561-018-0274-6))
 
 Similarity of fast and slow earthquakes illuminated by machine learning ([link](https://www.nature.com/articles/s41561-018-0272-8#data-availability))
@@ -77,19 +75,19 @@ As we usually do to anaylize data with temporality, we apply Fourier transform. 
 In preliminary we under estimated the importance of feature engineering. As this is a traditional machine learning task, and the raw data is presented in time sequence, we cannot feed the data into machine learning models directly. Shown the raw data visualization, the acoustic data is dense in time steps, but the value disturbance is not significant most of time.
 Here are some statistic features extracted from the raw data, including mean, mode, standard deviation etc.
 
-> TODO: 
-> - explain `kurtosis`, `skew`, `quantile`  
+**Kurtosis**
 
-Kurtosis
 - measure of tailedness  
 ![pic2](https://upload.wikimedia.org/wikipedia/commons/e/e6/Standard_symmetric_pdfs.png)
 
-Skewness
-- measure of asymmetry
+**Skewness**
+
+- measure of asymmetry  
 ![pic1](https://cdn-images-1.medium.com/max/800/1*nj-Ch3AUFmkd0JUSOW_bTQ.jpeg)
 
-Quantile
-- Cut points that devide data
+**Quantile**
+
+- Cut points that devide data  
 ![pic3](https://www.hr-diagnostics.de/fileadmin/user_upload/Magazin/Artikelbilder/normieren-und-die-normalverteilung.jpg)
 
 |mean| std| max|kurtosis|skew|quantile (.01)|quantile (.05)|quantile (.95)|quantile (.99)|
@@ -143,17 +141,24 @@ Boosting is a machine learning ensemble meta-algorithm for reducing both varianc
 
 [![](ensemble.png)](https://medium.com/greyatom/a-quick-guide-to-boosting-in-ml-acf7c1585cb5)
 
-> TODO: 
-> - more about boosting
-
 ## Result
-
-> have little experience with kernel function for regression
 
 > TODO: 
 > for each model:
 > - troubles
 > - chart for different hyperparameters
+
+### Random Forest
+
+> TODO
+
+### SVR
+
+> TODO
+
+### LSTM
+
+> TODO
 
 ## Conclusion
 
