@@ -80,7 +80,7 @@ batch_size = 64
 epoches = 200
 loss_fn = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=lr)
-scheduler = optim.lr_scheduler.StepLR(optimizer, 150, gamma=.1)
+scheduler = optim.lr_scheduler.StepLR(optimizer, 120, gamma=.1)
 
 epoch = 0
 batch_iter = 0
