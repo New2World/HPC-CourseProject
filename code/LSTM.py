@@ -1,4 +1,4 @@
-import math
+import os, math
 import numpy as np
 import pandas as pd
 
@@ -6,6 +6,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
+
+from sklearn.metrics import mean_absolute_error
 
 class ConvLSTM(nn.Module):
     def __init__(self):
@@ -43,68 +45,67 @@ class ConvLSTM(nn.Module):
         o = self.outp(x)
         return o
 
-class SimpleLSTM(nn.Module):
-    def __init__(self):
-        super(SimpleLSTM, self).__init__()
-        self.lstm = nn.LSTM(1,1,batch_first=True)
+model = ConvLSTM()
 
-    def forward(self, x):
-        x = self.lstm(x)
-        return x
+if os.path.exists("../model_param/pytorch_model_enhanced.pt"):
+    npzfile = np.load("../data/earthquake_test_enhanced.npz")
+    X_test = npzfile['X_test'].reshape((1,-1,36)).transpose(0,2,1)
+    y_test = npzfile['y_test'].reshape((1,-1,1))
+    n_samples = X_test.shape[0]
+    print ("load data")
 
-# X = torch.randn(64,200,12)
-# y = torch.randn(64,200,1)
-# X = torch.randn(64,200,1)
-# y = torch.randn(64,200,1)
+    model.load_state_dict(torch.load("../model_param/pytorch_model_enhanced.pt"))
+    model.eval()
+    model.cuda()
+    print ("load model")
 
-npzfile = np.load("earthquake_train_enhanced.npz")
-X_train = npzfile['X_train'].reshape((1,8000,36)).transpose(0,2,1)
-y_train = npzfile['y_train'].reshape((1,8000,1))
-n_samples = X_train.shape[0]
-# print X_train.shape, y_train.shape
+    print ("evaluating")
+    X = torch.from_numpy(X_test).type(torch.FloatTensor).cuda()
+    y_pred = model(X).detach().cpu().numpy()
 
-# raw_data = pd.read_csv("../train.csv", dtype={"acoustic_data":np.int64, "time_to_failure":np.float64}).data
-# X_train = raw_data[:4000*150000,0].reshape((4000,150000,1))
-# y_train = raw_data[:4000*150000,1].reshape((4000,150000,1))
-# X_test = raw_data[4000*150000+1:,0]
-# y_test = raw_data[4000*150000+1:,1]
+    mae = mean_absolute_error(y_test.squeeze(), y_pred.squeeze())
 
-print ("generate data")
+    print ("MAE: {}".format(mae))
+else:
+    npzfile = np.load("../data/earthquake_train_enhanced.npz")
+    X_train = npzfile['X_train'].reshape((1,8000,36)).transpose(0,2,1)
+    y_train = npzfile['y_train'].reshape((1,8000,1))
+    n_samples = X_train.shape[0]
+    print ("load data")
 
-model = ConvLSTM().cuda()
-# model = SimpleLSTM()
-print ("build model")
+    model.cuda()
+    print ("build model")
 
-lr = .0045
-batch_size = 64
-epoches = 1000
-loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=lr)
-scheduler = optim.lr_scheduler.StepLR(optimizer, 300, gamma=.1)
+    lr = .0045
+    batch_size = 64
+    epoches = 1000
+    loss_fn = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, 300, gamma=.1)
 
-epoch = 0
-batch_iter = 0
-batchs = int(math.ceil(1.*n_samples/batch_size))
-seq_index = np.arange(n_samples)
-X = torch.from_numpy(X_train).type(torch.FloatTensor).cuda()
-y = torch.from_numpy(y_train).type(torch.FloatTensor).cuda()
-print ("enable GPU")
+    epoch = 0
+    batch_iter = 0
+    batchs = int(math.ceil(1.*n_samples/batch_size))
+    seq_index = np.arange(n_samples)
+    X = torch.from_numpy(X_train).type(torch.FloatTensor).cuda()
+    y = torch.from_numpy(y_train).type(torch.FloatTensor).cuda()
+    print ("enable GPU")
 
-summary_writer = SummaryWriter()
+    summary_writer = SummaryWriter()
 
-print ("training")
-while epoch < epoches:
-    outp = model(X)
-    loss = loss_fn(outp, y)
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-    epoch += 1
-    summary_writer.add_scalar("epoch loss", loss, global_step=epoch)
-    print ("{}/{} - avg loss: {} - lr: {}".format(epoch, epoches, loss.cpu().data.numpy(), scheduler.get_lr()[0]))
-    scheduler.step()
+    print ("training")
+    while epoch < epoches:
+        outp = model(X)
+        loss = loss_fn(outp, y)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        epoch += 1
+        summary_writer.add_scalar("epoch loss", loss, global_step=epoch)
+        print ("{}/{} - avg loss: {} - lr: {}".format(epoch, epoches, loss.cpu().data.numpy(), scheduler.get_lr()[0]))
+        scheduler.step()
 
-# summary_writer.add_graph(model)
-torch.save(model.state_dict(), "pytorch_model_enhanced.pt")
-summary_writer.close()
-print ("Model saved")
+    # summary_writer.add_graph(model)
+    torch.save(model.state_dict(), "pytorch_model_enhanced.pt")
+    summary_writer.close()
+    print ("Model saved")
