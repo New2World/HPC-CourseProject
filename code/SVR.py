@@ -12,12 +12,13 @@ print "Load training data"
 # grid search best hyperparameters
 svr = NuSVR(gamma='scale')
 param_grid = {
-        'nu':[.2, .4, .5, .6, .8],
+        'nu':[.2, .4, .6, .8],
         'kernel':['poly','rbf'],
-        'degree':[3,5,10],
-        'C':[.1, .25, .5, .75, .9, 1.],
+        'degree':[5,10],
+        'C':[.25, .5, .75, 1.],
 }
-grid_search = GridSearchCV(svr, cv=10, param_grid=param_grid, n_jobs=16)
+grid_search = GridSearchCV(svr, cv=5, param_grid=param_grid, n_jobs=10)
+print "Grid search working..."
 grid_search.fit(X_train, y_train)
 # svr.fit(X_train, y_train)
 
@@ -33,6 +34,7 @@ print "Load test data"
 
 # use trained model to predict
 y_test_pred = grid_search.predict(X_test)
+# y_test_pred = svr.predict(X_test)
 
 # mean absolute error
 mae = mean_absolute_error(y_test, y_test_pred)

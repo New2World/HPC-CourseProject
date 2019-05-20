@@ -81,16 +81,20 @@ for data_chunk in training_data:
     x = data_chunk.values[:,0]
     y = data_chunk.values[:,1]
     if iter < 4000:
-        X_train.append(get_features(x[:75000]))
-        y_train.append(y[74999])
-        X_train.append(get_features(x[75001:]))
+        X_train.append(get_features(x))
         y_train.append(y[-1])
+        # X_train.append(get_features(x[:75000]))
+        # y_train.append(y[74999])
+        # X_train.append(get_features(x[75001:]))
+        # y_train.append(y[-1])
     else:
-        full_len = x.shape[0]
-        X_test.append(get_features(x[:full_len]))
-        y_test.append(y[(full_len-1)/2])
-        X_test.append(get_features(x[(full_len-1)/2+1:]))
+        X_test.append(get_features(x))
         y_test.append(y[-1])
+        # full_len = x.shape[0]
+        # X_test.append(get_features(x[:full_len]))
+        # y_test.append(y[(full_len-1)/2])
+        # X_test.append(get_features(x[(full_len-1)/2+1:]))
+        # y_test.append(y[-1])
     iter += 1
     print ("#{} finshed".format(iter))
 
