@@ -1,4 +1,4 @@
-import os, math
+import os, sys, math
 import numpy as np
 import pandas as pd
 
@@ -20,12 +20,16 @@ class ConvLSTM(nn.Module):
         self.bnorm_2 = nn.BatchNorm1d(128)
         self.pool_2 = nn.MaxPool1d(2)
         self.lstm = nn.LSTM(128, 64, batch_first=True)
-        self.dropout = nn.Dropout(.5)
-        self.fc_1 = nn.Linear(64, 16)
+        self.drop_1 = nn.Dropout(.5)
+        self.fc_1 = nn.Linear(64, 32)
+        self.drop_2 = nn.Dropout(.2)
+        self.fc_2 = nn.Linear(32,16)
         self.sigmoid = nn.Sigmoid()
         self.outp = nn.Linear(16, 1)
         nn.init.xavier_uniform_(self.conv_1.weight)
         nn.init.xavier_uniform_(self.conv_2.weight)
+        nn.init.normal_(self.fc_1.weight)
+        nn.init.normal_(self.fc_2.weight)
         nn.init.xavier_uniform_(self.outp.weight)
 
     def forward(self, x):
@@ -39,34 +43,23 @@ class ConvLSTM(nn.Module):
         # x = self.pool_2(x)
         x = x.transpose(2,1)
         x = self.lstm(x)
-        x = self.dropout(x[0])
+        x = self.drop_1(x[0])
         x = self.fc_1(x)
+        x = self.sigmoid(x)
+        x = self.drop_2(x)
+        x = self.fc_2(x)
         x = self.sigmoid(x)
         o = self.outp(x)
         return o
 
 model = ConvLSTM()
 
-if os.path.exists("../model_param/pytorch_model_enhanced.pt"):
-    npzfile = np.load("../data/earthquake_test_enhanced.npz")
-    X_test = npzfile['X_test'].reshape((1,-1,36)).transpose(0,2,1)
-    y_test = npzfile['y_test'].reshape((1,-1,1))
-    n_samples = X_test.shape[0]
-    print ("load data")
+arg = sys.argv
+model_path = "../model_param/pytorch_model_enhanced.pt"
+if len(arg) > 2:
+    model_path = arg[2]
 
-    model.load_state_dict(torch.load("../model_param/pytorch_model_enhanced.pt"))
-    model.eval()
-    model.cuda()
-    print ("load model")
-
-    print ("evaluating")
-    X = torch.from_numpy(X_test).type(torch.FloatTensor).cuda()
-    y_pred = model(X).detach().cpu().numpy()
-
-    mae = mean_absolute_error(y_test.squeeze(), y_pred.squeeze())
-
-    print ("MAE: {}".format(mae))
-else:
+if "train" in arg:
     npzfile = np.load("../data/earthquake_train_enhanced.npz")
     X_train = npzfile['X_train'].reshape((1,8000,36)).transpose(0,2,1)
     y_train = npzfile['y_train'].reshape((1,8000,1))
@@ -78,10 +71,10 @@ else:
 
     lr = .0045
     batch_size = 64
-    epoches = 1000
+    epoches = 2000
     loss_fn = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, 300, gamma=.1)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, 850, gamma=.1)
 
     epoch = 0
     batch_iter = 0
@@ -106,6 +99,25 @@ else:
         scheduler.step()
 
     # summary_writer.add_graph(model)
-    torch.save(model.state_dict(), "pytorch_model_enhanced.pt")
+    torch.save(model.state_dict(), model_path)
     summary_writer.close()
     print ("Model saved")
+else:
+    npzfile = np.load("../data/earthquake_test_enhanced.npz")
+    X_test = npzfile['X_test'].reshape((1,-1,36)).transpose(0,2,1)
+    y_test = npzfile['y_test'].reshape((1,-1,1))
+    n_samples = X_test.shape[0]
+    print ("load data")
+
+    model.load_state_dict(torch.load(model_path))
+    model.eval()
+    model.cuda()
+    print ("load model")
+
+    print ("evaluating")
+    X = torch.from_numpy(X_test).type(torch.FloatTensor).cuda()
+    y_pred = model(X).detach().cpu().numpy()
+
+    mae = mean_absolute_error(y_test.squeeze(), y_pred.squeeze())
+
+    print ("MAE: {}".format(mae))
