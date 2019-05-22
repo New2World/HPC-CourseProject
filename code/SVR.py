@@ -4,7 +4,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.svm import NuSVR, SVR
 from sklearn.metrics import mean_absolute_error
 
-npzfile = np.load("earthquake_train_enhanced.npz")
+npzfile = np.load("../data/earthquake_train_enhanced.npz")
 X_train = npzfile['X_train']
 y_train = npzfile['y_train']
 print "Load training data"
@@ -27,7 +27,7 @@ del X_train, y_train
 print ("Best parameters set:")
 print (grid_search.best_params_)
 
-npzfile = np.load('earthquake_test_enhanced.npz')
+npzfile = np.load('../data/earthquake_test_enhanced.npz')
 X_test = npzfile['X_test']
 y_test = npzfile['y_test']
 print "Load test data"
