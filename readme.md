@@ -2,8 +2,10 @@
 
 ## Introduction
 
-This project is an on-going kaggle competition, aiming at forecasting earthquakes. it is one of the most important problems in Earth science to precise because of the devastating consequences of earthquakes.  
-In earthquake prediction, there are three key points: **when**, **where**, **how long**. Our topic focus on **when** the earthquake will happen.
+Forecasting the occurrence of a future earthquake is one of the fundamental problems in earth science because of its severe consequences. Current scientific studies related to earthquake forecasting focus on three key points: when the event will occur, where it will occur, and how large it will be. Among all the prediction tasks, the successful forecast of the next earthquake time can help to avoid society loss as much as possible.  
+In this project, we will use real-time seismic data to simulate when the earthquake will occur. Multiple machine learning algorithms including Random Forest(RF) and Support Vector Regression(SVR) have been applied in previous works[2-4]. However, their methods only considered and extracted limited features from the real time seismic data which achieved unsatisfactory results. For instance, the data provided by [kaggle.com](https://www.kaggle.com/c/LANL-Earthquake-Prediction), there are only two fields given, ​acoustic signal level​ and time to failure.​ The objective of the earthquake prediction task is to learn the fluctuate pattern of the acoustic single level and further predict the possible time to failure. Due to the acoustic single data is time-related, it is intuitive to implement regression methods for the purpose of predicting the next failure time based on the current and historical acoustic single patterns. Nevertheless, only considering these limited features could not give a satisfactory prediction result since this prediction task needs more time-related features to improve the performance.  
+In this project, we implement RF and SVR as the baseline models. In addition, we further consider the famous variant of the recurrent neural network - Long Short Term Memory (LSTM) in order to better capture the time-sensitive sequential feature from the real-time seismic data. To achieve this objective, we employed the Fourier transformation to each chunk of the data. After transferring the time-series data
+to frequency domain, more features can be extracted.
 
 ## Preliminary
 
@@ -17,18 +19,20 @@ We decided to use _support vector regressor_, _hidden Markov model_, _random for
 
 ## State of the Art
 
-Continuous chatter of the Cascadia subduction zone revealed by machine learning ([link](https://www.nature.com/articles/s41561-018-0274-6))
+Since this project comes from a Kaggle on-going competition, there have been several solution and kernels proposed by others. As most kernels suggest that the raw data is not sufficient to accomplish the prediction task, different strategies of feature engineering are proposed. Per ​jsaguiar’s[1]​ kernel, there implements some statistic features including mean, standard deviation, max/min, kurtosis, skew and quantile. Base on these features, different machine learning models are applied, like support vector machine, linear regression and random forest[2-4]​ . Apart from extracting features by hand, some researchers choose to do end-to-end learning and use 1D convolutional neural network to automatically get features from raw data[5]​ . The model start from 1D CNN to extract features from raw data with filter size 10. Through 3 convolution layers, the model gets 16 features, then these features are feeded into several fully connected layers to get final output. Compared with these previous methods, this work uses Fourier transformation to extract more features that can not be seen in time domain.  
+Apart from this competition, there have been many researchs on earthquake prediction using various features and models.
 
-Similarity of fast and slow earthquakes illuminated by machine learning ([link](https://www.nature.com/articles/s41561-018-0272-8#data-availability))
-- model  
-gradient boosted trees25 algorithm
+### Models
 
-Earthquake prediction model using support vector regressor and hybrid neural networks ([link](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0199004))  
-
-The SVR-HNN model
+- Continuous chatter of the Cascadia subduction zone revealed by machine learning ([link](https://www.nature.com/articles/s41561-018-0274-6))
+- Similarity of fast and slow earthquakes illuminated by machine learning ([link](https://www.nature.com/articles/s41561-018-0272-8#data-availability))
+    - model: gradient boosted trees25 algorithm  
+- Earthquake prediction model using support vector regressor and hybrid neural networks ([link](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0199004))  
+- The SVR-HNN model
 ![paper1](https://journals.plos.org/plosone/article/figure/image?id=10.1371/journal.pone.0199004.g003&size=large)
 
-Parameters
+### Features
+
 - a and b value (from well-known geophysical law known as Gutenberg-Richter law)
 - Seismic energy release
 - Time of n events
@@ -75,33 +79,13 @@ As we usually do to anaylize data with temporality, we apply Fourier transform. 
 In preliminary we under estimated the importance of feature engineering. As this is a traditional machine learning task, and the raw data is presented in time sequence, we cannot feed the data into machine learning models directly. Shown the raw data visualization, the acoustic data is dense in time steps, but the value disturbance is not significant most of time.
 Here are some statistic features extracted from the raw data, including mean, mode, standard deviation etc.
 
-**Kurtosis**
+- **Kurtosis**: measure of tailedness  
+- **Skewness**: measure of asymmetry  
+- **Quantile**: cut points that devide data  
 
-- measure of tailedness  
-![pic2](https://upload.wikimedia.org/wikipedia/commons/e/e6/Standard_symmetric_pdfs.png)
+![](feature_correlation.png)
 
-**Skewness**
-
-- measure of asymmetry  
-![pic1](https://cdn-images-1.medium.com/max/800/1*nj-Ch3AUFmkd0JUSOW_bTQ.jpeg)
-
-**Quantile**
-
-- Cut points that devide data  
-![pic3](https://www.hr-diagnostics.de/fileadmin/user_upload/Magazin/Artikelbilder/normieren-und-die-normalverteilung.jpg)
-
-|mean| std| max|kurtosis|skew|quantile (.01)|quantile (.05)|quantile (.95)|quantile (.99)|
-|:--:|:--:|:--:|:------:|:--:|:-----------:|:-----------:|:-----------:|:-----------:|
-|4.79|2.55|13.0000|-0.18|0.26|0.0000|1.0000|9.0000|11.0000|
-|4.76|2.52|13.0000|-0.24|0.22|0.0000|1.0000|9.0000|11.0000|
-|4.75|2.52|13.0000|-0.24|0.23|0.0000|1.0000|9.0000|11.0000|
-|4.75|2.53|13.0000|-0.25|0.24|0.0000|1.0000|9.0000|11.0000|
-|4.75|2.52|13.0000|-0.24|0.24|0.0000|1.0000|9.0000|11.0000|
-|4.77|2.50|13.0000|-0.22|0.25|0.0000|1.0000|9.0000|11.0000|
-|4.78|2.52|13.0000|-0.24|0.26|0.0000|1.0000|9.0000|11.0000|
-|4.78|2.52|13.0000|-0.24|0.26|0.0000|1.0000|9.0000|11.0000|
-|4.78|2.52|13.0000|-0.24|0.26|0.0000|1.0000|9.0000|11.0000|
-|4.78|2.52|13.0000|-0.23|0.26|0.0000|1.0000|9.0000|11.0000|
+Good features usually have low correlation between each other, which makes every attributes have different contribution to the result. So given the heatmap of our feature correlation we can see our features have low correlations.
 
 ## Method
 
@@ -120,7 +104,7 @@ Each tree uses different data generated by bootstrapping, so it helps reduce var
 Support vector machine is a deterministic classification model, using support vector to get the decision boundary that has a largest margin to nearest data. It can also be used as a regression method, maintaining all the main features that characterize the algorithm.  
 Original support vector regression is a linear model. To extend it to fit non-linear functions, kernel functions are introduced. Kernel is first proposed in classification method, like the figure showing below, the data in the figure is not linear separable if we look at it from above. What kernels do is to map the data to higher dimension from which it can be differentiate by a single line or a hyperplane.
 
-We use the support vector machine model in [scikit-learn](https://scikit-learn.org/stable/), a free software machine learning library for the Python programming language. The support vector machine implementation is based on `libsvm`, a high-efficient open source machine learning library, and apart from original support vector regressor, it provide another version of support vector machine which has a upper bound of support vectors.
+We use the support vector machine model in [scikit-learn](https://scikit-learn.org/stable/), a free software machine learning library for the Python programming language. The support vector machine implementation is based on `libsvm`, a high-efficient open source machine learning library, and apart from original support vector regressor, it provide another version of support vector machine which has a upper bound of support vectors, which is a way to do regularization on the model.
 
 [![](svm_kernel.gif)](https://towardsdatascience.com/understanding-support-vector-machine-part-2-kernel-trick-mercers-theorem-e1e6848c6c4d)
 
@@ -135,18 +119,7 @@ Besides, there is another version of recurrent network named gated recurrent uni
 
 [![](gru_sample.png)](https://towardsdatascience.com/understanding-gru-networks-2ef37df6c9be)
 
-### Boosting
-
-Boosting is a machine learning ensemble meta-algorithm for reducing both variance and bias. Different from bagging's parallel mechanism, boosting is a sequential training process. The main idea is to train several weak learners sequentially, and give the misclassified samples higher weight, which means next learner should pay more attention to those samples to correct the mistake from its predecessor.
-
-[![](ensemble.png)](https://medium.com/greyatom/a-quick-guide-to-boosting-in-ml-acf7c1585cb5)
-
 ## Result
-
-> TODO: 
-> for each model:
-> - troubles
-> - chart for different hyperparameters
 
 ### Random Forest
 
@@ -154,12 +127,28 @@ Boosting is a machine learning ensemble meta-algorithm for reducing both varianc
 
 ### SVR
 
-> TODO
+We did grid search for SVR with 5-fold validation to find the optimal hyperparameters. For support vector regressor with restriction on support vectors, we provide different value for parameter `nu`, number of support vectors, and `C`, penalty of error term.
+
+|nu \ C| 0.2| 0.4| 0.6| 0.8| 1.0|
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|0.25|2.94|2.82|2.76|2.73|2.71|
+|0.5|2.69|2.62|2.58|2.55|2.53|
+|0.75|2.58|2.53|2.50|2.47|2.45|
+|1.0|2.57|2.51|2.47|2.44|2.42|
+
+So the final hyperparameters we choose are {nu = 1.0, C = 1.0}, and in that case the mean absolute error is $2.42$
 
 ### LSTM
 
-> TODO
+Our model is shown below, the first convolution layer will generate 64 features based on the manually extracted features and the second layer will extend them to 128 features. Then the whole sequence of features will be feeded to LSTM and outputs have dimensionality of 64. To make our model have more representation power, a two layers fully connected network is added to each output from LSTM. Two dropoutlayers are added to the fully connected layers to avoid overfitting, the first one has 0.5 dropping rate while 0.2 for the second one.
+
+![](nn_diagram.jpg)
+
+The most important hyperparameter, learning rate, is set to $0.0045$ and it will decay exponentially every 850 epochs. After 2,000 epochs, the mean square error is $2.14$ and the mean absolute error on test data is $2.11$. The loss curve is shown in following figure, we are not pretty sure about the reason the loss increase in a sudden at about 500 epochs. One possible explanation is our model reaches the local minimum before the sudden increase. However, our optimizer is Adam, which can escape from the local optima so the loss will raise in a short time.
+
+![](epoch_loss.jpg)
 
 ## Conclusion
 
-> TODO
+In this project, we get the ​laboratorial earthquake data with time-related feature ​ acoustic data ​ and sequential outcome ​time to failure. To predict time to failure given acoustic data, we first analyze the data and extract features based on ​Fourier transformation​.  
+Two baseline algorithm RF and SVR are trained in this project. To improve the performance of prediction, we design a deep neural network combining convolution layers, recurrent neural network and fully connected layers to make sure that our model has strong representation power. After 2,000 epochs of training, mean square error is reduced to $2.14$ and this model is applied to test data where mean absolute error is $2.11$
