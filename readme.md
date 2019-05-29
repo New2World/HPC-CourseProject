@@ -158,11 +158,11 @@ Two baseline algorithm RF and SVR are trained in this project. To improve the pe
 
 ## Reference
 
-[1] https://www.kaggle.com/jsaguiar/predicting-earthquake-number
-[2] https://www.kaggle.com/inversion/basic-feature-benchmark
-[3] https://www.kaggle.com/flaport/linear-regression-on-180-features
-[4] https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper
-[5] https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction
+[1] https://www.kaggle.com/jsaguiar/predicting-earthquake-number  
+[2] https://www.kaggle.com/inversion/basic-feature-benchmark  
+[3] https://www.kaggle.com/flaport/linear-regression-on-180-features  
+[4] https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper  
+[5] https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction  
 [6] https://en.wikipedia.org/wiki/Frequency_domain
 
 ## Contribution
