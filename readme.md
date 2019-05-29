@@ -74,7 +74,7 @@ Here is what the raw data looks like.
 
 ### Visualization
 
-![visualization](https://github.com/New2World/HPC-CourseProject/blob/master/visualization.jpg)
+![visualization](visualization.jpg)
 
 Each peak of red line correspond to a zero value in blue line, indicating an earthquake happens.  
 As we usually do to anaylize data with temporality, we apply Fourier transform. Here is the figure of one entire earthquake in frequency domain[6]. Most of time there is low frequency data, only when an earthquake happens high frequency will appear for few milliseconds.
@@ -88,7 +88,7 @@ Here are some statistic features extracted from the raw data, including mean, mo
 - **Skewness**: measure of asymmetry  
 - **Quantile**: cut points that devide data  
 
-![](https://github.com/New2World/HPC-CourseProject/blob/master/feature_correlation.png)
+![](feature_correlation.png)
 
 Good features usually have low correlation between each other, which makes every attributes have different contribution to the result. So given the heatmap of our feature correlation we can see our features have low correlations.
 
@@ -111,18 +111,18 @@ Original support vector regression is a linear model. To extend it to fit non-li
 
 We use the support vector machine model in [scikit-learn](https://scikit-learn.org/stable/), a free software machine learning library for the Python programming language. The support vector machine implementation is based on `libsvm`, a high-efficient open source machine learning library, and apart from original support vector regressor, it provide another version of support vector machine which has a upper bound of support vectors, which is a way to do regularization on the model.
 
-[![](https://github.com/New2World/HPC-CourseProject/blob/master/svm_kernel.gif)](https://towardsdatascience.com/understanding-support-vector-machine-part-2-kernel-trick-mercers-theorem-e1e6848c6c4d)
+[![](svm_kernel.gif)](https://towardsdatascience.com/understanding-support-vector-machine-part-2-kernel-trick-mercers-theorem-e1e6848c6c4d)
 
 ### Recurrent Neural Network (LSTM, GRU)
 
 Recurrent neural network is a neural network structure aiming at dealing with sequential data. Like reading a book, human will keep knowledge about previous chapters in mind while reading. So as the way how recurrent neural network works, during learning all neural cells share the same parameters and update together.  
 However, the original version of recurrent neural network is facing some problems, like losing what has been learned before in the situation that the time sequence is long enough and gradient vanishing. So here comes long-short term memory (LSTM) structure. In the cell of LSTM, there are three "gates" to determine what to **forget**, what to **update** and what to **output**. After each LSTM cell there will be an output to system and a status output to next cell, and the status output will help the neural network model to keep a long-term memory.
 
-[![](https://github.com/New2World/HPC-CourseProject/blob/master/lstm_sample.png)](https://colah.github.io/posts/2015-08-Understanding-LSTMs)
+[![](lstm_sample.png)](https://colah.github.io/posts/2015-08-Understanding-LSTMs)
 
 Besides, there is another version of recurrent network named gated recurrent unit (GRU). Similar to LSTM, the main idea behind GRU is to let model learn how to keep useful long-term information while learning short-term knowledge. Also GRU has gates: **update gate** and **reset gate**.
 
-[![](https://github.com/New2World/HPC-CourseProject/blob/master/gru_sample.png)](https://towardsdatascience.com/understanding-gru-networks-2ef37df6c9be)
+[![](gru_sample.png)](https://towardsdatascience.com/understanding-gru-networks-2ef37df6c9be)
 
 ## Result
 
@@ -147,11 +147,11 @@ So the final hyperparameters we choose are `nu = 1.0` `C = 1.0`, and in that cas
 
 Our model is shown below, the first convolution layer will generate 64 features based on the manually extracted features and the second layer will extend them to 128 features. Then the whole sequence of features will be feeded to LSTM and outputs have dimensionality of 64. To make our model have more representation power, a two layers fully connected network is added to each output from LSTM. Two dropoutlayers are added to the fully connected layers to avoid overfitting, the first one has 0.5 dropping rate while 0.2 for the second one.
 
-![](https://github.com/New2World/HPC-CourseProject/blob/master/nn_diagram.jpg)
+![](nn_diagram.jpg)
 
 The most important hyperparameter, learning rate, is set to 0.0045 and it will decay exponentially every 850 epochs. After 2,000 epochs, the mean square error is 2.14 and the mean absolute error on test data is 2.11. The loss curve is shown in following figure, we are not pretty sure about the reason the loss increase in a sudden at about 500 epochs. One possible explanation is our model reaches the local minimum before the sudden increase. However, our optimizer is Adam, which can escape from the local optima so the loss will raise in a short time.
 
-![](https://github.com/New2World/HPC-CourseProject/blob/master/epoch_loss.jpg)
+![](epoch_loss.jpg)
 
 ## Conclusion
 
