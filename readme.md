@@ -1,5 +1,11 @@
 # LANL-Earthquake-Prediction
 
+<div style="text-align:right">
+
+Group 4: Ruiqi Wang, Chu Qiao
+
+</div>
+
 ## Introduction
 
 Forecasting the occurrence of a future earthquake is one of the fundamental problems in earth science because of its severe consequences. Current scientific studies related to earthquake forecasting focus on three key points: when the event will occur, where it will occur, and how large it will be. Among all the prediction tasks, the successful forecast of the next earthquake time can help to avoid society loss as much as possible.  
@@ -31,7 +37,7 @@ Apart from this competition, there have been many researchs on earthquake predic
 - The SVR-HNN model
 ![paper1](https://journals.plos.org/plosone/article/figure/image?id=10.1371/journal.pone.0199004.g003&size=large)
 
-### Features
+### Attribute
 
 - a and b value (from well-known geophysical law known as Gutenberg-Richter law)
 - Seismic energy release
@@ -66,13 +72,10 @@ Here is what the raw data looks like.
 
 ### Visualization
 
-![visualization](data_visualization.png)
+![visualization](visualization.jpg)
 
-Each peak of red line correspond to a zero value in blue line, indicating an earthquake happens.
-
-As we usually do to anaylize data with temporality, we apply Fourier transform. Here is the figure of one entire earthquake in frequency field. Most of time there is low frequency data, only when an earthquake happens high frequency will appear for few milliseconds.
-
-![fft](fft.png)
+Each peak of red line correspond to a zero value in blue line, indicating an earthquake happens.  
+As we usually do to anaylize data with temporality, we apply Fourier transform. Here is the figure of one entire earthquake in frequency domain[6]. Most of time there is low frequency data, only when an earthquake happens high frequency will appear for few milliseconds.
 
 ### Features
 
@@ -131,12 +134,12 @@ We did grid search for SVR with 5-fold validation to find the optimal hyperparam
 
 |nu \ C| 0.2| 0.4| 0.6| 0.8| 1.0|
 |:-:|:-:|:-:|:-:|:-:|:-:|
-|0.25|2.94|2.82|2.76|2.73|2.71|
-|0.5|2.69|2.62|2.58|2.55|2.53|
-|0.75|2.58|2.53|2.50|2.47|2.45|
-|1.0|2.57|2.51|2.47|2.44|2.42|
+|**0.25**|$2.94$|$2.82$|$2.76$|$2.73$|$2.71$|
+|**0.5**|$2.69$|$2.62$|$2.58$|$2.55$|$2.53$|
+|**0.75**|$2.58$|$2.53$|$2.50$|$2.47$|$2.45$|
+|**1.0**|$2.57$|$2.51$|$2.47$|$2.44$|$2.42$|
 
-So the final hyperparameters we choose are {nu = 1.0, C = 1.0}, and in that case the mean absolute error is $2.42$
+So the final hyperparameters we choose are `nu = 1.0` `C = 1.0`, and in that case the mean absolute error is $2.42$
 
 ### LSTM
 
@@ -152,3 +155,29 @@ The most important hyperparameter, learning rate, is set to $0.0045$ and it will
 
 In this project, we get the ​laboratorial earthquake data with time-related feature ​ acoustic data ​ and sequential outcome ​time to failure. To predict time to failure given acoustic data, we first analyze the data and extract features based on ​Fourier transformation​.  
 Two baseline algorithm RF and SVR are trained in this project. To improve the performance of prediction, we design a deep neural network combining convolution layers, recurrent neural network and fully connected layers to make sure that our model has strong representation power. After 2,000 epochs of training, mean square error is reduced to $2.14$ and this model is applied to test data where mean absolute error is $2.11$
+
+## Reference
+
+[1] https://www.kaggle.com/jsaguiar/predicting-earthquake-number
+[2] https://www.kaggle.com/inversion/basic-feature-benchmark
+[3] https://www.kaggle.com/flaport/linear-regression-on-180-features
+[4] https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper
+[5] https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction
+[6] https://en.wikipedia.org/wiki/Frequency_domain
+
+## Contribution
+
+### Ruiqi Wang
+
+- Feature Engineering
+- Model implement:
+    - Support Vector Machine
+    - CNN + LSTM
+- Blog Edit:
+    - State-of-Art
+    - Method (Random Forest, Support Vector Machine, Recurrent Network)
+    - Result (SVR, LSTM)
+
+### Chu Qiao
+
+> TODO
