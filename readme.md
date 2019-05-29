@@ -160,12 +160,12 @@ Two baseline algorithm RF and SVR are trained in this project. To improve the pe
 
 ## Reference
 
-[1] https://www.kaggle.com/jsaguiar/predicting-earthquake-number  
-[2] https://www.kaggle.com/inversion/basic-feature-benchmark  
-[3] https://www.kaggle.com/flaport/linear-regression-on-180-features  
-[4] https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper  
-[5] https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction  
-[6] https://en.wikipedia.org/wiki/Frequency_domain
+[1] [https://www.kaggle.com/jsaguiar/predicting-earthquake-number](https://www.kaggle.com/jsaguiar/predicting-earthquake-number)  
+[2] [https://www.kaggle.com/inversion/basic-feature-benchmark](https://www.kaggle.com/inversion/basic-feature-benchmark)  
+[3] [https://www.kaggle.com/flaport/linear-regression-on-180-features](https://www.kaggle.com/flaport/linear-regression-on-180-features)  
+[4] [https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper](https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper)  
+[5] [https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction](https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction)  
+[6] [https://en.wikipedia.org/wiki/Frequency_domain](https://en.wikipedia.org/wiki/Frequency_domain)
 
 [rf1]: http://chart.apis.google.com/chart?cht=tx&chl=rss=\sum_{left-tree}(y_i-y^*_L)^2+\sum_{right-tree}(y_i-y^*_R)^2  
 [rfl]: http://chart.apis.google.com/chart?cht=tx&chl=y^*_L  
