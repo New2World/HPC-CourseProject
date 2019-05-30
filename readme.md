@@ -128,7 +128,21 @@ Besides, there is another version of recurrent network named gated recurrent uni
 
 ### Random Forest
 
-> TODO
+In this project, we used sklearn to implement Random Forest regressor, and apply grid search to find the best hyperparameter set.
+
+![](rf_code.png)
+
+![](best_param.png)
+
+- bootstrap: a method to pick a subset of the training set with replacement. The purpose is to use different to construct each individual decision tree.
+- max_depth: the maximum number of depth of each decision tree
+- max_features: number of features used to generate trees
+- n_estimators: total number of trees inside this RF
+
+In this case, `max_features` is using `log2`, which means the features for decision trees are redundant.  
+The mean absolute error for Random Forest with hyperparameters shown above is approximate 3.67
+
+![](rf_result.png)
 
 ### SVR
 
@@ -171,6 +185,7 @@ Two baseline algorithm RF and SVR are trained in this project. To improve the pe
 [rfl]: http://chart.apis.google.com/chart?cht=tx&chl=y^*_L  
 [rfr]: http://chart.apis.google.com/chart?cht=tx&chl=y^*_R
 
+<!--
 ## Contribution
 
 ### Ruiqi Wang
@@ -182,8 +197,9 @@ Two baseline algorithm RF and SVR are trained in this project. To improve the pe
 - Blog Edit:
     - State-of-Art
     - Method (Random Forest, Support Vector Machine, Recurrent Network)
-    - Result (SVR, LSTM)
+    - Result (Random Forest, SVR, LSTM)
 
 ### Chu Qiao
 
 > TODO
+-->
