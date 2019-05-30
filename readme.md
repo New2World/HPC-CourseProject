@@ -2,7 +2,7 @@
 
 <div style="text-align:right">
 
-Group 4: Ruiqi Wang, Chu Qiao <br/>
+Group 4: Ruiqi Wang, Chu Qiao <br>
 Instructor: Sunita Chandrasekaran
 
 </div>
