@@ -179,10 +179,21 @@ Two baseline algorithm RF and SVR are trained in this project. To improve the pe
 [4] [https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper](https://www.kaggle.com/amignan/baseline-rf-model-reproducing-the-2017-paper)  
 [5] [https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction](https://www.kaggle.com/buchan/transformer-network-with-1d-cnn-feature-extraction)  
 [6] [https://en.wikipedia.org/wiki/Frequency_domain](https://en.wikipedia.org/wiki/Frequency_domain)
+[7] [https://towardsdatascience.com/understanding-support-vector-machine-part-2-kernel-trick-mercers-theorem-e1e6848c6c4d](https://towardsdatascience.com/understanding-support-vector-machine-part-2-kernel-trick-mercers-theorem-e1e6848c6c4d)
+[8] [https://colah.github.io/posts/2015-08-Understanding-LSTMs](https://colah.github.io/posts/2015-08-Understanding-LSTMs)
+[9] [https://towardsdatascience.com/understanding-gru-networks-2ef37df6c9be](https://towardsdatascience.com/understanding-gru-networks-2ef37df6c9be) 
 
 [rf1]: http://chart.apis.google.com/chart?cht=tx&chl=rss=\sum_{left-tree}(y_i-y^*_L)^2+\sum_{right-tree}(y_i-y^*_R)^2  
 [rfl]: http://chart.apis.google.com/chart?cht=tx&chl=y^*_L  
 [rfr]: http://chart.apis.google.com/chart?cht=tx&chl=y^*_R
+
+### Contact us
+
+#### Ruiqi Wang (Ritchie)
+- **email**: wangrq@udel.edu
+
+#### Chu Qiao (Jack)
+- **email**: qiaochu@udel.edu
 
 <!--
 ## Contribution
